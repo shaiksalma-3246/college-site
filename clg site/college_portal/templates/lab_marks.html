@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab Marks</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #e0ecff, #f6f9ff);
+            padding: 30px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            overflow-x: auto;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1f2937;
+        }
+
+        .controls {
+            margin-bottom: 15px;
+        }
+
+        .controls input,
+        .controls button,
+        .controls a {
+            padding: 7px 12px;
+            margin-right: 8px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+        }
+
+        .controls button {
+            background: #4f46e5;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        .controls button:hover {
+            background: #4338ca;
+        }
+
+        .controls a {
+            background: #0ea5e9;
+            color: white;
+            text-decoration: none;
+        }
+
+        .controls a:hover {
+            background: #0284c7;
+        }
+
+        table {
+            border-collapse: collapse;
+            min-width: 900px;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #eef2ff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        tr:hover {
+            background: #eef2ff;
+        }
+
+        input[type="number"] {
+            width: 60px;
+            padding: 4px;
+            border-radius: 5px;
+            border: 1px solid #cbd5e1;
+            text-align: center;
+        }
+
+        .avg {
+            font-weight: bold;
+            color: #0f766e;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>📘 Lab Marks Register</h2>
+
+    <div class="controls">
+        <input type="date" id="date">
+        <button onclick="addWeek()">➕ Add Week</button>
+        <a href="{% url 'download_lab_pdf' %}" target="_blank">📄 PDF</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>Roll No</th>
+{% for session in sessions %}
+<th onclick="deleteWeek('{{ session.id }}', '{{ session.date }}')"
+    style="cursor:pointer; color:#1d4ed8;"
+    title="Click to delete this week">
+    {{ session.date }} 🗑️
+</th>
+{% endfor %}
+
+
+            <th>Avg</th>
+        </tr>
+
+        {% for row in table %}
+        <tr>
+            <td>{{ row.roll }}</td>
+
+            {% for mark in row.marks %}
+            <td>
+                <input type="number"
+       min="0"
+       max="100"
+       value="{{ mark }}"
+       data-roll="{{ row.roll }}"
+       data-session-index="{{ forloop.counter0 }}"
+       onchange="handleChange(this)">
+
+            </td>
+            {% endfor %}
+
+            <td class="avg">{{ row.avg }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie) {
+        document.cookie.split(";").forEach(c => {
+            c = c.trim();
+            if (c.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(c.split("=")[1]);
+            }
+        });
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie("csrftoken");
+
+const sessionIds = JSON.parse('{{ session_ids_json|escapejs }}');
+
+function addWeek() {
+    const date = document.getElementById("date").value;
+    if (!date) {
+        alert("Please select a date");
+        return;
+    }
+
+    fetch("/lab/add-session/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ date: date })
+    }).then(() => location.reload());
+}
+
+function saveMark(roll, sessionIndex, marks) {
+    const sessionId = sessionIds[sessionIndex];
+
+    fetch("/lab/save-mark/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            roll: roll,
+            session: sessionId,
+            marks: marks
+        })
+    }).then(() => location.reload());
+}
+
+function handleChange(input) {
+    const roll = input.dataset.roll;
+    const sessionIndex = parseInt(input.dataset.sessionIndex);
+    const marks = input.value;
+
+    saveMark(roll, sessionIndex, marks);
+}
+function deleteWeek(sessionId, dateText) {
+    if (!confirm("Delete week " + dateText + " ?")) {
+        return;
+    }
+
+    fetch("/lab/delete-session/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ session_id: sessionId })
+    }).then(() => location.reload());
+}
+
+</script>
+
+</body>
+</html>

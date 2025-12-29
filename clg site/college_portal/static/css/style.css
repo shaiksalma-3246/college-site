@@ -1,0 +1,262 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100%;
+    background: linear-gradient(135deg, #eef2f3, #d9e4f5);
+    overflow-x: hidden;
+}
+
+#splash {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    cursor: pointer;
+}
+
+#splash img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.splash-text {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6 }
+    50% { opacity: 1 }
+    100% { opacity: 0.6 }
+}
+
+
+#login-box {
+    width: 380px;
+    margin: 120px auto;
+    background: linear-gradient(135deg, #ffffff, #f3f7ff);
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    animation: fadeUp 0.8s ease;
+}
+
+@keyframes fadeUp {
+    from { transform: translateY(40px); opacity: 0 }
+    to { transform: translateY(0); opacity: 1 }
+}
+
+#login-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4b0082;
+}
+
+#login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+#login-box input:focus {
+    border-color: #6a0dad;
+    box-shadow: 0 0 10px rgba(106,13,173,0.4);
+    outline: none;
+}
+
+#login-box button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #4b0082, #8e2de2);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+#login-box button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(138,43,226,0.6);
+}
+
+
+.top-menu {
+    display: flex;
+    background: linear-gradient(90deg, #4b0082, #8e2de2);
+}
+
+.top-menu a {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.top-menu a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+
+.after-login-image {
+    width: 100%;
+    height: calc(100vh - 55px); 
+    overflow: hidden;
+}
+
+.after-login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  
+    object-position: center;
+}
+
+.syllabus-wrapper {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.syllabus-heading {
+    font-size: 34px;
+    margin-bottom: 35px;
+    color: #1f3b57;
+}
+
+.syllabus-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap: 22px;
+    max-width: 950px;
+    margin: auto;
+}
+
+.syllabus-card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: 0.35s;
+}
+
+.syllabus-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    background: linear-gradient(135deg, #f3e7ff, #ffffff);
+}
+
+.active-lab {
+    border: 2px solid #8e2de2;
+    box-shadow: 0 0 25px rgba(142,45,226,0.5);
+}
+
+
+.syllabus-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.syllabus-card:active,
+.syllabus-card:focus-visible {
+    background: linear-gradient(135deg, #8e2de2, #4b0082);
+    color: white;
+    transform: scale(0.97);
+}
+
+.experiment-page {
+    background: linear-gradient(135deg, #f7fbff, #e9f4fa);
+}
+
+.exp-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.exp-tab {
+    padding: 10px 22px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    background: #ddeaf4;
+    font-size: 14px;
+    transition: 0.4s;
+}
+
+.exp-tab:hover {
+    background: #c6def1;
+}
+
+.exp-tab.active {
+    background: linear-gradient(135deg, #0097a7, #26c6da);
+    color: white;
+    box-shadow: 0 10px 30px rgba(38,198,218,0.6);
+}
+
+.exp-content {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.exp-section {
+    display: none;
+    background: white;
+    padding: 32px;
+    border-radius: 16px;
+    border-left: 6px solid #26c6da;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    animation: fadeUp 0.4s ease;
+}
+
+.exp-section.active {
+    display: block;
+}
+
+pre {
+    background: #f7f9fc;
+    padding: 24px;
+    border-radius: 12px;
+    overflow-x: auto;
+
+    font-family: "Courier New", Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: left;
+    color: #1a1a1a;
+
+    white-space: pre;
+}
+
+.output-heading {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    font-weight: 700;
+    color: #0b3c5d;
+    text-decoration: underline;
+}
+

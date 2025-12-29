@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 4:Cluster Analysis
+    </h2>
+
+    
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+
+       
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+           To cluster customer data using K-Means and identify the optimal number of clusters using the Elbow Method.
+        </div>
+
+        
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+        
+K-Means clustering is an unsupervised machine learning algorithm used to divide a dataset into K distinct clusters such that data points within the same cluster are more similar to each other than to those in other clusters. In this experiment, K-Means clustering is applied for customer segmentation using two attributes: Annual Income and Spending Score.
+Since K-Means is a distance-based algorithm, feature scaling is required. Therefore, the data is standardized using StandardScaler, which transforms the data to have zero mean and unit variance.
+<br><br>
+Standardization Formula<br>
+<img src="{% static 'img/exp4-f1.png' %}"
+alt="k-means" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br><br>
+                
+where:<br>
+x = original value<br>
+μ = mean of the feature<br>
+𝜎= standard deviation<br>
+
+To determine the optimal number of clusters, the Elbow Method is used. This method calculates the Within Cluster Sum of Squares (WCSS) for different values of K. WCSS represents the total squared distance between each data point and its cluster centroid.
+<br>
+WCSS Formula<br>
+<img src="{% static 'img/exp4-f2.png' %}"
+alt="Elbow Method" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br><br>
+where:<br>
+k = number of clusters<br>
+Ci = i-th cluster<br>
+μi = centroid of the i-th cluster<br>
+
+The value of K at which the decrease in WCSS becomes minimal (forming an elbow shape) is chosen as the optimal number of clusters.
+<br>
+After selecting K = 3, the K-Means algorithm assigns each data point to the nearest cluster centroid using Euclidean distance.
+<br><br>
+Euclidean Distance Formula<br>
+<img src="{% static 'img/exp4-f3.png' %}"
+alt="Euclidean Distance" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br><br>
+The centroids are updated iteratively until convergence is achieved.
+<br>
+<br>
+To evaluate the quality of clustering, the Silhouette Score is calculated. It measures how well a data point fits within its assigned cluster compared to other clusters.
+<br>
+Silhouette Score Formula<br>
+<img src="{% static 'img/exp4-f4.png' %}"
+alt="Silhouette Score Formula" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br><br>
+where:<br>
+a = average distance between a point and other points in the same cluster<br>
+b = average distance between a point and points in the nearest cluster<br>
+<br>
+
+The silhouette score ranges from −1 to +1, where a higher value indicates better clustering.<br>
+
+        </div>
+
+        
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
+data = pd.DataFrame({
+    'Annual_Income': [15, 18, 20, 25, 30, 35, 40, 45, 50, 55],
+    'Spending_Score': [39, 45, 52, 60, 65, 70, 75, 80, 85, 90]
+})
+
+print("Dataset:\n", data)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(data)
+wcss = []
+
+for k in range(1, 8):
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X_scaled)
+    wcss.append(kmeans.inertia_)
+
+plt.plot(range(1, 8), wcss, marker='o')
+plt.xlabel("Number of Clusters")
+plt.ylabel("WCSS")
+plt.title("Elbow Method")
+plt.show()
+kmeans = KMeans(n_clusters=3, random_state=42)
+clusters = kmeans.fit_predict(X_scaled)
+
+data['Cluster'] = clusters
+print("\nClustered Data:\n", data)
+plt.scatter(
+    data['Annual_Income'],
+    data['Spending_Score'],
+    c=data['Cluster'],
+    cmap='viridis'
+)
+
+plt.scatter(
+    scaler.inverse_transform(kmeans.cluster_centers_)[:,0],
+    scaler.inverse_transform(kmeans.cluster_centers_)[:,1],
+    s=200,
+    c='red',
+    marker='X',
+    label='Centroids'
+)
+
+plt.xlabel("Annual Income")
+plt.ylabel("Spending Score")
+plt.title("Customer Segmentation using K-Means")
+plt.legend()
+plt.show()
+score = silhouette_score(X_scaled, clusters)
+print("\nSilhouette Score:", round(score, 3))
+print("\nConclusion:")
+print("K-Means clustering successfully grouped similar data points.")
+print("Clusters help in understanding hidden patterns in the dataset.")
+            </pre>
+        </div>
+
+        
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import pandas as pd</b>
+
+→ Imports Pandas library to create and manage datasets in table format.
+
+<b>import numpy as np</b>
+
+→ Imports NumPy for numerical and mathematical operations.
+
+<b>import matplotlib.pyplot as plt</b>
+
+→ Imports Matplotlib for plotting graphs and visualizations.
+
+<b>from sklearn.cluster import KMeans</b>
+
+→ Imports the K-Means clustering algorithm from Scikit-Learn.
+
+<b>from sklearn.preprocessing import StandardScaler</b>
+
+→ Imports StandardScaler to normalize data.
+
+<b>from sklearn.metrics import silhouette_score</b>
+
+→ Imports silhouette score to evaluate clustering performance.
+
+<b>data = pd.DataFrame({</b>
+
+→ Creates a Pandas DataFrame to store the dataset.
+
+<b>'Annual_Income': [15, 18, 20, 25, 30, 35, 40, 45, 50, 55],</b>
+
+→ Defines the Annual Income feature for customers.
+
+<b>'Spending_Score': [39, 45, 52, 60, 65, 70, 75, 80, 85, 90]</b>
+
+→ Defines the Spending Score feature for customers.
+
+<b>})</b>
+
+→ Ends the DataFrame creation.
+
+<b>print("Dataset:\n", data)</b>
+
+→ Prints the dataset to verify input data.
+
+<b>scaler = StandardScaler()</b>
+
+→ Creates a StandardScaler object for normalization.
+
+<b>X_scaled = scaler.fit_transform(data)</b>
+
+→ Fits the scaler on data and transforms it so all features have equal scale.
+
+<b>wcss = []</b>
+
+→ Initializes an empty list to store WCSS values.
+
+<b>for k in range(1, 8):</b>
+
+→ Loops through cluster numbers from 1 to 7.
+
+<b>kmeans = KMeans(n_clusters=k, random_state=42)</b>
+
+→ Creates a K-Means model with k clusters.
+
+<b>kmeans.fit(X_scaled)</b>
+
+→ Fits the K-Means model to scaled data.
+
+<b>wcss.append(kmeans.inertia_)</b>
+
+→ Stores the WCSS value for the current cluster count.
+
+<b>plt.plot(range(1, 8), wcss, marker='o')</b>
+
+→ Plots number of clusters vs WCSS.
+
+<b>plt.xlabel("Number of Clusters")</b>
+
+→ Labels the X-axis.
+
+<b>plt.ylabel("WCSS")</b>
+
+→ Labels the Y-axis.
+
+<b>plt.title("Elbow Method")</b>
+
+→ Adds title to the graph.
+
+<b>plt.show()</b>
+
+→ Displays the elbow graph.
+
+<b>kmeans = KMeans(n_clusters=3, random_state=42)</b>
+
+→ Initializes K-Means with 3 clusters.
+
+<b>clusters = kmeans.fit_predict(X_scaled)</b>
+
+→ Fits the model and assigns cluster labels to each data point.
+
+<b>data['Cluster'] = clusters</b>
+
+→ Adds cluster labels to the dataset.
+
+<b>print("\nClustered Data:\n", data)</b>
+
+→ Prints the clustered dataset.
+
+<b>plt.scatter(</b>
+
+→ Starts scatter plot creation.
+
+<b>data['Annual_Income'],</b>
+
+→ Uses Annual Income for X-axis.
+
+<b>data['Spending_Score'],</b>
+
+→ Uses Spending Score for Y-axis.
+
+<b>c=data['Cluster'],</b>
+
+→ Colors points based on cluster labels.
+
+<b>map='viridis'
+)</b>
+
+→ Applies color map to clusters.
+
+<b>plt.scatter(</b>
+
+→ Starts plotting centroids.
+
+<b>scaler.inverse_transform(kmeans.cluster_centers_)[:,0],</b>
+
+→ Converts scaled centroid X-values back to original income values.
+
+<b>scaler.inverse_transform(kmeans.cluster_centers_)[:,1],</b>
+
+→ Converts scaled centroid Y-values back to original spending values.
+
+<b>s=200,</b>
+
+→ Sets size of centroid points.
+
+<b>c='red',</b>
+
+→ Colors centroids red.
+
+<b>marker='X',</b>
+
+→ Uses X-shaped marker.
+
+<b>label='Centroids'
+)</b>
+
+→ Labels centroids in legend.
+
+<b>plt.xlabel("Annual Income")</b>
+
+→ X-axis label.
+
+<b>plt.ylabel("Spending Score")</b>
+
+→ Y-axis label.
+
+<b>plt.title("Customer Segmentation using K-Means")</b>
+
+→ Title of the graph.
+
+<b>plt.legend()</b>
+
+→ Displays legend.
+
+<b>plt.show()</b>
+
+→ Shows the final cluster plot.
+
+<b>score = silhouette_score(X_scaled, clusters)</b>
+
+→ Calculates silhouette score to evaluate cluster quality.
+
+<b>print("\nSilhouette Score:", round(score, 3))</b>
+
+→ Prints silhouette score rounded to 3 decimals.
+
+<b>print("\nConclusion:")</b>
+
+→ Prints conclusion heading.
+
+<b>print("K-Means clustering successfully grouped similar data points.")</b>
+
+→ States successful clustering.
+
+<b>print("Clusters help in understanding hidden patterns in the dataset.")</b>
+
+→ Explains importance of clustering.
+</pre>
+</div>
+<div id="output" class="exp-section">
+<strong>Output:</strong><br><br>
+<pre>
+<span class="output-heading">Dataset:</span>
+    Annual_Income  Spending_Score
+0             15              39
+1             18              45
+2             20              52
+3             25              60
+4             30              65
+5             35              70
+6             40              75
+7             45              80
+8             50              85
+9             55              90
+
+<img src="{% static 'img/exp4-1.png' %}"
+alt="Elbow Method" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br>
+<span class="output-heading">Clustered Data:</span>
+    Annual_Income  Spending_Score  Cluster
+0             15              39        2
+1             18              45        2
+2             20              52        2
+3             25              60        0
+4             30              65        0
+5             35              70        0
+6             40              75        1
+7             45              80        1
+8             50              85        1
+9             55              90        1
+
+<img src="{% static 'img/exp4-2.png' %}"
+alt="Customer segmentation using k-means" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br><br>
+Silhouette Score: 0.498
+ </pre>
+        </div>
+
+        
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+           The experiment successfully groups customers into distinct clusters based on income and spending behavior. The Elbow Method helps in selecting the optimal number of clusters, and the silhouette score confirms that the clustering quality is satisfactory.
+        </div>
+
+        
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+<span class="output-heading">1. What is clustering?</span>
+
+Ans:Clustering is an unsupervised learning technique that groups similar data points into clusters based on similarity.
+
+<span class="output-heading">2. What type of algorithm is K-Means?</span>
+
+Ans:K-Means is an unsupervised machine learning algorithm.
+
+<span class="output-heading">3. What does the value of K represent in K-Means?</span>
+
+Ans:K represents the number of clusters to be formed in the dataset.
+
+<span class="output-heading">4. Why is StandardScaler used before applying K-Means?</span>
+
+Ans:StandardScaler is used to normalize the data so that all features contribute equally to distance calculation
+
+<span class="output-heading">5. What distance metric does K-Means use?</span>
+
+Ans:K-Means uses Euclidean distance to calculate similarity between data points.
+
+<span class="output-heading">6. What is WCSS?</span>
+
+Ans:WCSS (Within Cluster Sum of Squares) measures how close data points are to their cluster centroid.
+
+<span class="output-heading">7. What is the Elbow Method?</span>
+
+Ans:The Elbow Method is used to find the optimal number of clusters by plotting WCSS against K.
+
+<span class="output-heading">8. What is a centroid?</span>
+
+Ans:A centroid is the mean position of all data points in a cluster.
+
+<span class="output-heading">9. What is the silhouette score?</span>
+
+Ans:Silhouette score measures how well a data point fits within its cluster compared to other clusters.
+
+<span class="output-heading">10. Where is K-Means clustering used in real life?</span>
+
+Ans:K-Means is used in customer segmentation, market analysis, image compression, and recommendation systems.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

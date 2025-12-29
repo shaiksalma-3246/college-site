@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 11: Decision Tree Classification
+    </h2>
+
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To implement a Decision Tree classification model to predict whether a student passes or fails
+            based on the number of study hours and to evaluate its performance.
+        </div>
+
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+            A Decision Tree is a supervised machine learning algorithm used for classification and regression.
+            It works by recursively splitting the dataset into subsets based on feature values, forming a tree-like structure.
+            <br><br>
+            Each internal node represents a decision rule, each branch represents an outcome of the rule,
+            and each leaf node represents a class label.
+            <br><br>
+
+            <strong>Gini Index (used in this experiment):</strong><br><br>
+            Gini = 1 − Σ p<sub>i</sub><sup>2</sup>
+            <br><br>
+            where p<sub>i</sub> is the probability of class i.
+            <br><br>
+            The split with the **lowest Gini index** is chosen as the best split.
+            <br><br>
+            In this experiment, a Decision Tree is applied to classify students as Pass or Fail
+            based on their study hours.
+        </div>
+
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+data = {
+    "Study_Hours": [1,2,3,4,5,6,7,8,9,10,11,12],
+    "Pass":        [0,0,0,0,1,1,1,1,1,1,1,1]
+}
+
+df = pd.DataFrame(data)
+
+print("Dataset:")
+print(df)
+
+X = df[["Study_Hours"]]
+y = df["Pass"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.5, random_state=42
+)
+
+model = DecisionTreeClassifier(
+    criterion="gini",
+    max_depth=3,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+plt.figure(figsize=(16, 10))
+plot_tree(
+    model,
+    feature_names=["Study_Hours"],
+    class_names=["Fail", "Pass"],
+    filled=True,
+    rounded=True,
+    fontsize=12
+)
+plt.title("Decision Tree Analysis – Pass/Fail Prediction")
+plt.show()
+            </pre>
+        </div>
+
+        
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>DecisionTreeClassifier</b>
+→ Implements decision tree algorithm for classification.
+
+<b>criterion="gini"</b>
+→ Uses Gini index to measure impurity.
+
+<b>max_depth=3</b>
+→ Limits tree depth to avoid overfitting.
+
+<b>train_test_split()</b>
+→ Splits data into training and testing sets.
+
+<b>model.fit()</b>
+→ Trains the decision tree model.
+
+<b>model.predict()</b>
+→ Predicts class labels for test data.
+
+<b>accuracy_score()</b>
+→ Measures overall prediction accuracy.
+
+<b>confusion_matrix()</b>
+→ Displays correct and incorrect predictions.
+
+<b>plot_tree()</b>
+→ Visualizes the decision tree structure.
+            </pre>
+        </div>
+
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+<span class="output-heading">Dataset:</span>
+    Study_Hours  Pass
+0             1     0
+1             2     0
+2             3     0
+3             4     0
+4             5     1
+5             6     1
+6             7     1
+7             8     1
+8             9     1
+9            10     1
+10           11     1
+11           12     1
+
+Accuracy: 1.0
+
+<span class="output-heading">Confusion Matrix:</span>
+
+ [[2 0]
+ [0 4]]
+
+<span class="output-heading">Classification Report:</span>
+               precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00         2
+           1       1.00      1.00      1.00         4
+
+    accuracy                           1.00         6
+   macro avg       1.00      1.00      1.00         6
+weighted avg       1.00      1.00      1.00         6
+
+<b>Decision Tree Analysis-Pass/Fail Prediction</b>
+<img src="{% static 'img/exp11.png' %}"
+alt="Elbow Method" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+
+   
+            </pre>
+        </div>
+
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            The Decision Tree model successfully classified students as pass or fail based on study hours.
+            The model achieved 100% accuracy, indicating excellent classification performance.
+        </div>
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+<b>1. What is a Decision Tree?</b>
+Ans: A tree-based supervised learning algorithm.
+
+<b>2. What is the splitting criterion used here?</b>
+Ans: Gini Index.
+
+<b>3. What does max_depth control?</b>
+Ans: The depth of the decision tree.
+
+<b>4. What is overfitting?</b>
+Ans: Model performs well on training data but poorly on new data.
+
+<b>5. What are leaf nodes?</b>
+Ans: Final nodes that represent class labels.
+
+<b>6. What is Gini Index?</b>
+Ans: A measure of impurity.
+
+<b>7. Is Decision Tree supervised?</b>
+Ans: Yes.
+
+<b>8. What is the dependent variable?</b>
+Ans: Pass.
+
+<b>9. Why visualize the tree?</b>
+Ans: To understand decision rules.
+
+<b>10. Where are Decision Trees used?</b>
+Ans: Medical diagnosis, credit scoring, decision support systems.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

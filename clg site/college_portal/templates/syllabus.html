@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="syllabus-wrapper">
+    <h2 class="syllabus-heading">Syllabus</h2>
+
+    <div class="syllabus-list">
+        <div class="syllabus-card">Natural Language Processing</div>
+        <div class="syllabus-card"><a href="https://ieeecisnbkrist-art.github.io/predictive_analytics/"
+   target="_blank"
+   rel="noopener noreferrer">Predictive Analytics</a></div>
+        <div class="syllabus-card">Data Visualization</div>
+        <div class="syllabus-card">Technical Report Writing & IPR</div>
+        <div class="syllabus-card">Deep Learning</div>
+        <div class="syllabus-card"><a href="https://thetechnest.github.io/cloudnest/" target="_blank" rel="noopener noreferrer">Cloud Computing</a></div>
+        <div class="syllabus-card">NLP & Data Visualization Lab</div>
+
+        
+        <div class="syllabus-card lab-card" onclick="openPALab(this)">
+            Predictive Analytics Lab
+        </div>
+
+        <div class="syllabus-card">Soft Skills</div>
+        <div class="syllabus-card">Technical Skills</div>
+    </div>
+</div>
+
+<script>
+function openPALab(card) {
+    document.querySelectorAll('.syllabus-card').forEach(c => {
+        c.classList.remove('active-lab');
+    });
+
+    card.classList.add('active-lab');
+
+    setTimeout(() => {
+        window.location.href = "{% url 'pa_lab' %}";
+    }, 300);
+}
+</script>
+
+{% endblock %}
