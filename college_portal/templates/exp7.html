@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 7: Confirmatory Factor Analysis (CFA)
+    </h2>
+
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To perform Confirmatory Factor Analysis (CFA) in order to validate the relationship between observed variables
+            and their underlying latent factors such as Communication Skills, Technical Skills, and Academic Skills.
+        </div>
+
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+            Confirmatory Factor Analysis (CFA) is a statistical technique used to test whether measured variables represent
+            a predefined number of latent constructs. Unlike Exploratory Factor Analysis (EFA), CFA requires the researcher
+            to specify the factor structure in advance.
+            <br><br>
+            CFA is commonly used in psychology, education, and social sciences to confirm theoretical models.
+            In this experiment, CFA is applied to verify whether observed skill-related variables load significantly
+            onto three latent factors: Communication Skills, Technical Skills, and Academic Skills.
+            <br><br>
+            <strong>CFA Measurement Model:</strong><br><br>
+            X = Λξ + δ
+            <br><br>
+            where:<br>
+            X = observed variables<br>
+            Λ = factor loading matrix<br>
+            ξ = latent variables (factors)<br>
+            δ = measurement error
+        </div>
+
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+#!pip install semopy
+import pandas as pd
+from semopy import Model, calc_stats
+
+data = {
+    "Speaking":   [65, 70, 75, 80, 85, 78, 82, 88],
+    "Writing":    [60, 68, 72, 78, 83, 76, 80, 85],
+    "Listening":  [62, 69, 74, 79, 84, 77, 81, 86],
+    "Coding":     [70, 75, 80, 85, 90, 88, 92, 78],
+    "Debugging":  [68, 74, 79, 84, 89, 86, 90, 76],
+    "Maths":      [72, 78, 82, 87, 92, 89, 94, 80],
+    "Science":    [70, 76, 81, 86, 91, 88, 93, 78]
+}
+
+df = pd.DataFrame(data)
+print("Dataset:")
+print(df)
+
+model_desc = """
+Communication_Skills =~ Speaking + Writing + Listening
+Technical_Skills =~ Coding + Debugging
+Academic_Skills =~ Maths + Science
+"""
+
+model = Model(model_desc)
+model.fit(df)
+
+print("\nCFA Parameter Estimates:")
+print(model.inspect())
+
+stats = calc_stats(model)
+print("\nModel Fit Statistics:")
+print(stats.T)
+
+print("\nConclusion:")
+print("The CFA results confirm that the observed variables load significantly on their respective latent factors.")
+            </pre>
+        </div>
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import pandas as pd</b>
+→ Imports Pandas for data handling.
+
+<b>from semopy import Model, calc_stats</b>
+→ Imports SEM tools for CFA modeling and fit statistics.
+
+<b>data = {...}</b>
+→ Creates dataset of observed variables.
+
+<b>df = pd.DataFrame(data)</b>
+→ Converts dictionary into DataFrame.
+
+<b>model_desc</b>
+→ Defines CFA model specifying latent variables and observed indicators.
+
+<b>Communication_Skills =~ Speaking + Writing + Listening</b>
+→ Defines Communication Skills latent factor.
+
+<b>Technical_Skills =~ Coding + Debugging</b>
+→ Defines Technical Skills latent factor.
+
+<b>Academic_Skills =~ Maths + Science</b>
+→ Defines Academic Skills latent factor.
+
+<b>model = Model(model_desc)</b>
+→ Initializes CFA model.
+
+<b>model.fit(df)</b>
+→ Fits CFA model to data.
+
+<b>model.inspect()</b>
+→ Displays factor loadings and parameter estimates.
+
+<b>calc_stats(model)</b>
+→ Calculates model fit indices such as CFI, RMSEA, GFI.
+            </pre>
+        </div>
+
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+<span class="output-heading">Dataset:</span>
+   Speaking  Writing  Listening  Coding  Debugging  Maths  Science
+0        65       60         62      70         68     72       70
+1        70       68         69      75         74     78       76
+2        75       72         74      80         79     82       81
+3        80       78         79      85         84     87       86
+4        85       83         84      90         89     92       91
+5        78       76         77      88         86     89       88
+6        82       80         81      92         90     94       93
+7        88       85         86      78         76     80       78
+
+<span class="output-heading">CFA Parameter Estimates:</span>
+                    lval  op                  rval   Estimate   Std. Err  \
+0               Speaking   ~  Communication_Skills   1.000000          -   
+1                Writing   ~  Communication_Skills   1.085583   0.036779   
+2              Listening   ~  Communication_Skills   1.045723   0.031853   
+3                 Coding   ~      Technical_Skills   1.000000          -   
+4              Debugging   ~      Technical_Skills   1.005715    0.02441   
+5                  Maths   ~       Academic_Skills   1.000000          -   
+6                Science   ~       Academic_Skills   1.058599   0.013447   
+7        Academic_Skills  ~~       Academic_Skills  49.624376  24.844173   
+8        Academic_Skills  ~~      Technical_Skills  51.043843  25.552645   
+9   Communication_Skills  ~~  Communication_Skills  50.985904  25.681237   
+10  Communication_Skills  ~~       Academic_Skills  35.402842  21.778505   
+11  Communication_Skills  ~~      Technical_Skills  36.790332   22.49121   
+12      Technical_Skills  ~~      Technical_Skills  52.513512  26.344445   
+13                Coding  ~~                Coding   0.175605   0.097029   
+14             Debugging  ~~             Debugging   0.072678   0.055364   
+15             Listening  ~~             Listening   0.000000   0.071057   
+16                 Maths  ~~                 Maths   0.063993   0.038062   
+17               Science  ~~               Science   0.000000     0.0231   
+18              Speaking  ~~              Speaking   0.377795   0.199761   
+19               Writing  ~~               Writing   0.106507   0.093274   
+
+      z-value   p-value  
+0           -         -  
+1   29.516693       0.0  
+2   32.829291       0.0  
+3           -         -  
+4   41.201319       0.0  
+5           -         -  
+6   78.721503       0.0  
+7    1.997425  0.045779  
+8    1.997595  0.045761  
+9    1.985337  0.047107  
+10   1.625586  0.104038  
+11   1.635765  0.101889  
+12   1.993343  0.046224  
+13   1.809827  0.070323  
+14   1.312747  0.189268  
+15        0.0       1.0  
+16   1.681307  0.092703  
+17        0.0       1.0  
+18   1.891233  0.058593  
+19   1.141877  0.253505  
+
+<span class="output-heading">Model Fit Statistics:</span>
+                    Value
+DoF             11.000000
+DoF Baseline    21.000000
+chi2            27.329030
+chi2 p-value     0.004097
+chi2 Baseline  273.803658
+CFI              0.935408
+GFI              0.900187
+AGFI             0.809449
+NFI              0.900187
+TLI              0.876688
+RMSEA            0.460506
+AIC             27.167743
+BIC             28.518249
+LogLik           3.416129
+
+            </pre>
+        </div>
+
+        
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            The Confirmatory Factor Analysis successfully validated the predefined factor structure.
+            The observed variables showed significant loadings on their respective latent factors,
+            confirming the theoretical measurement model.
+        </div>
+
+       
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+1. What is Confirmatory Factor Analysis?
+Ans: CFA is used to test whether observed variables fit a predefined factor structure.
+
+2. Is CFA supervised or unsupervised?
+Ans: CFA is theory-driven and supervised.
+
+3. Difference between EFA and CFA?
+Ans: EFA explores factors, CFA confirms predefined factors.
+
+4. What are latent variables?
+Ans: Unobserved variables inferred from observed data.
+
+5. What are factor loadings?
+Ans: They show the relationship between observed variables and latent factors.
+
+6. What is CFI?
+Ans: Comparative Fit Index used to assess model fit.
+
+7. What is RMSEA?
+Ans: Root Mean Square Error of Approximation, measures goodness of fit.
+
+8. What software/library is used here?
+Ans: semopy library in Python.
+
+9. Where is CFA used?
+Ans: Psychology, education, behavioral sciences.
+
+10. What does a good CFA model indicate?
+Ans: Strong theoretical validity of the measurement model.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

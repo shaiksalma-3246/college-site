@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 2: Parametric and Non-Parametric Tests
+    </h2>
+
+    
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    
+    <div class="exp-content">
+
+        
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To perform Parametric (Independent t-test) and Non-Parametric
+            (Chi-Square) statistical tests for analyzing data in predictive analytics.
+        </div>
+
+        
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+            In this experiment, parametric and non-parametric statistical tests are
+            implemented using Python. An Independent t-test is used to compare the
+            means of two independent groups. The Chi-Square Goodness of Fit test is
+            used to compare observed and expected frequencies, while the Chi-Square
+            Test of Independence is used to determine whether two categorical
+            variables are associated.
+        </div>
+
+        
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import numpy as np
+import pandas as pd
+from scipy.stats import ttest_ind, chisquare, chi2_contingency
+
+
+print("----- PARAMETRIC TEST : INDEPENDENT t-TEST -----")
+
+group1 = np.array([78, 85, 88, 90, 92])
+group2 = np.array([70, 72, 75, 78, 80])
+
+t_stat, p_val = ttest_ind(group1, group2)
+
+print("Group 1 Scores:", group1)
+print("Group 2 Scores:", group2)
+print("t-statistic:", t_stat)
+print("p-value:", p_val)
+
+if p_val < 0.05:
+    print("Conclusion: Significant difference between the two groups.\n")
+else:
+    print("Conclusion: No significant difference between the two groups.\n")
+
+
+print("----- NON-PARAMETRIC TEST : CHI-SQUARE GOODNESS OF FIT -----")
+
+observed = np.array([50, 30, 20])
+expected = np.array([40, 40, 20])
+
+chi_stat, p_value = chisquare(f_obs=observed, f_exp=expected)
+
+print("Observed Frequencies:", observed)
+print("Expected Frequencies:", expected)
+print("Chi-Square Value:", chi_stat)
+print("p-value:", p_value)
+
+if p_value < 0.05:
+    print("Conclusion: Observed data does not fit expected distribution.\n")
+else:
+    print("Conclusion: Observed data fits expected distribution.\n")
+
+print("----- NON-PARAMETRIC TEST : CHI-SQUARE TEST OF INDEPENDENCE -----")
+
+data = {
+    "Gender": ["Male", "Male", "Female", "Female", "Male", "Female", "Male", "Female"],
+    "Result": ["Pass", "Fail", "Pass", "Pass", "Fail", "Fail", "Pass", "Pass"]
+}
+
+df = pd.DataFrame(data)
+
+table = pd.crosstab(df["Gender"], df["Result"])
+print("Contingency Table:")
+print(table)
+
+chi2, p, dof, expected = chi2_contingency(table)
+
+print("Chi-Square Value:", chi2)
+print("Degrees of Freedom:", dof)
+print("p-value:", p)
+
+if p < 0.05:
+    print("Conclusion: Significant association exists between variables.")
+else:
+    print("Conclusion: No significant association exists between variables.")
+            </pre>
+        </div>
+
+        
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import numpy as np</b>
+→ Imports NumPy library for numerical operations.
+
+<b>import pandas as pd</b>
+→ Imports pandas library for data handling and tables.
+
+<b>from scipy.stats import ttest_ind, chisquare, chi2_contingency</b>
+→ Imports statistical functions for t-test and Chi-Square tests.
+
+<b>print("----- PARAMETRIC TEST : INDEPENDENT t-TEST -----")</b>
+→ Displays the heading for the parametric test section.
+
+<b>group1 = np.array([78, 85, 88, 90, 92])</b>
+→ Creates numerical data for group 1.
+
+<b>group2 = np.array([70, 72, 75, 78, 80])</b>
+→ Creates numerical data for group 2.
+
+<b>t_stat, p_val = ttest_ind(group1, group2)</b>
+→ Performs independent t-test between two groups.
+
+<b>print("Group 1 Scores:", group1)</b>
+→ Prints scores of group 1.
+
+<b>print("Group 2 Scores:", group2)</b>
+→ Prints scores of group 2.
+
+<b>print("t-statistic:", t_stat)</b>
+→ Displays the calculated t-value.
+
+<b>print("p-value:", p_val)</b>
+→ Displays the p-value of the t-test.
+
+<b>if p_val < 0.05:</b>
+→ Checks whether the p-value is less than 0.05.
+
+<b>print("Conclusion: Significant difference between the two groups.\n")</b>
+→ Prints conclusion when a significant difference exists.
+
+<b>else:</b>
+→ Executes when the condition is false.
+
+<b>print("Conclusion: No significant difference between the two groups.\n")</b>
+→ Prints conclusion when no significant difference exists.
+
+<b>print("----- NON-PARAMETRIC TEST : CHI-SQUARE GOODNESS OF FIT -----")</b>
+→ Displays heading for Chi-Square Goodness of Fit test.
+
+<b>observed = np.array([50, 30, 20])</b>
+→ Stores observed frequencies.
+
+<b>expected = np.array([40, 40, 20])</b>
+→ Stores expected frequencies.
+
+<b>chi_stat, p_value = chisquare(f_obs=observed, f_exp=expected)</b>
+→ Performs Chi-Square Goodness of Fit test.
+
+<b>print("Observed Frequencies:", observed)</b>
+→ Prints observed frequency values.
+
+<b>print("Expected Frequencies:", expected)</b>
+→ Prints expected frequency values.
+
+<b>print("Chi-Square Value:", chi_stat)</b>
+→ Displays the Chi-Square statistic.
+
+<b>print("p-value:", p_value)</b>
+→ Displays the p-value of the test.
+
+<b>if p_value < 0.05: </b>
+→ Checks whether the result is statistically significant.
+
+<b>print("Conclusion: Observed data does not fit expected distribution.\n")</b>
+→ Prints conclusion when data does not fit expectation.
+
+<b>else:</b>
+→ Executes when condition is false.
+
+<b>print("Conclusion: Observed data fits expected distribution.\n")</b>
+→ Prints conclusion when data fits expectation.
+
+<b>print("----- NON-PARAMETRIC TEST : CHI-SQUARE TEST OF INDEPENDENCE -----")</b>
+→ Displays heading for Chi-Square Test of Independence.
+
+
+<b>data = {</b>
+→ Creates a dictionary to store categorical data.
+<b>
+"Gender": ["Male", "Male", "Female", "Female", "Male", "Female", "Male", "Female"],</b>
+→ Stores gender values.
+
+
+<b>"Result": ["Pass", "Fail", "Pass", "Pass", "Fail", "Fail", "Pass", "Pass"]</b>
+→ Stores result values.
+
+<b>}</b>
+→ Ends the dictionary definition.
+
+<b>df = pd.DataFrame(data)</b>
+→ Converts dictionary into a pandas DataFrame.
+
+<b>table = pd.crosstab(df["Gender"], df["Result"])</b>
+→ Creates a contingency table from the data.
+
+<b>print("Contingency Table:")</b>
+→ Displays heading for the contingency table.
+
+<b>print(table)</b>
+→ Prints the contingency table.
+
+<b>chi2, p, dof, expected = chi2_contingency(table)</b>
+→ Performs Chi-Square Test of Independence.
+
+<b>print("Chi-Square Value:", chi2)</b>
+→ Displays the Chi-Square value.
+
+<b>print("Degrees of Freedom:", dof)</b>
+→ Displays the degrees of freedom.
+
+<b>print("p-value:", p)</b>
+→ Displays the p-value.
+
+<b>if p < 0.05:</b>
+→ Checks whether association is significant.
+
+<b>print("Conclusion: Significant association exists between variables.")</b>
+→ Prints conclusion when variables are associated.
+
+<b>else:</b>
+→ Executes when condition is false.
+
+<b>print("Conclusion: No significant association exists between variables.")</b>
+→ Prints conclusion when variables are independent.
+
+
+            </pre>
+        </div>
+
+    
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+<span class="output-heading">PARAMETRIC TEST : INDEPENDENT t-TEST</span>
+Group 1 Scores: [78 85 88 90 92]
+Group 2 Scores: [70 72 75 78 80]
+t-statistic: 3.7915786126715556
+p-value: 0.005299886100012601
+Conclusion: Significant difference between the two groups.
+
+<span class="output-heading">CHI-SQUARE GOODNESS OF FIT</span>
+Observed Frequencies: [50 30 20]
+Expected Frequencies: [40 40 20]
+Chi-Square Value: 5.0
+p-value: 0.0820849986238988
+Conclusion: Observed data fits expected distribution.
+
+<span class="output-heading">CHI-SQUARE TEST OF INDEPENDENCE</span>
+Result  Fail  Pass
+Gender
+Female     1     3
+Male       2     2
+
+Chi-Square Value: 0.0
+Degrees of Freedom: 1
+p-value: 1.0
+Conclusion: No significant association exists between variables.
+            </pre>
+        </div>
+
+        
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            Parametric and non-parametric statistical tests were successfully
+            performed and interpreted using Python.
+        </div>
+
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+<span class="output-heading">1.What is a parametric test?</span>
+Answer:A parametric test assumes normal distribution and uses parameters like mean and standard deviation.
+
+<span class="output-heading">2.Give one example of a parametric test.</span>
+Answer:Independent t-test.
+
+<span class="output-heading">3.What is an independent t-test used for?</span>
+Answer:It is used to compare the means of two independent groups.
+
+<span class="output-heading">4.What is a non-parametric test?</span>
+Answer:A non-parametric test does not assume any specific data distribution.
+
+<span class="output-heading">5.Is the Chi-Square test parametric or non-parametric?</span>
+Answer:Chi-Square test is a non-parametric test.
+
+<span class="output-heading">6.What is the Chi-Square Goodness of Fit test?</span>
+Answer:It checks whether observed frequencies match expected frequencies.
+
+<span class="output-heading">7.What is the Chi-Square Test of Independence?</span>
+Answer:It determines whether two categorical variables are associated.
+
+<span class="output-heading">8.What is a p-value?</span>
+Answer:The p-value indicates the probability of obtaining the result under the null hypothesis.
+
+<span class="output-heading">9.What significance level is commonly used?</span>
+Answer:The commonly used significance level is 0.05.
+
+<span class="output-heading">10.What does p-value < 0.05 indicate?</span>
+Answer:It indicates a statistically significant result and the null hypothesis is rejected.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

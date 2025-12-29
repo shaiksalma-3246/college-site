@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 5: Logistic Regression – Predictive Analysis
+    </h2>
+
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To implement Logistic Regression for predicting whether a student passes or fails based on study hours.
+        </div>
+
+        
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+Logistic Regression is a supervised machine learning classification algorithm used to predict binary outcomes such as pass/fail, yes/no, or true/false. In this experiment, Logistic Regression is applied to predict whether a student will pass or fail based on the number of study hours.
+<br><br>
+The dataset consists of Study Hours as the independent variable and Pass status as the dependent variable. The dataset is first organized using a Pandas DataFrame. To evaluate the model effectively, the dataset is divided into training data and testing data using the train-test split technique. The model is trained using the training set and predictions are made on the testing set.
+<br><br>
+Logistic Regression works by estimating the probability of an outcome using a mathematical function called the sigmoid (logistic) function, which converts linear values into probabilities between 0 and 1. If the predicted probability is greater than a threshold value (usually 0.5), the output is classified as Pass (1); otherwise, it is classified as Fail (0).
+<br><br>
+The performance of the model is evaluated using accuracy score, confusion matrix, and classification report, which provide insights into correct predictions, misclassifications, precision, recall, and F1-score. Finally, a graph is plotted to visualize the relationship between study hours and pass/fail prediction.
+  <br><br>
+1. Logistic (Sigmoid) Function<br>
+<img src="{% static 'img/exp5-f1.png' %}"
+alt="Elbow Method" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br><br>
+where,<br>
+
+P(y=1) = probability of passing<br>
+β0 = intercept<br>
+β1= coefficient<br>
+x = study hours<br><br>
+2. Decision Rule
+<br>
+If P(y=1)≥0.5⇒Pass (1)
+<br>
+If P(y=1)<0.5 ⇒ Fail(0)
+<br>
+3. Accuracy Formula
+<img src="{% static 'img/exp5-2.png' %}"
+alt="Elbow Method" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<br><br>
+Where:<br>
+TP = True Positives<br>
+TN = True Negatives<br>
+FP = False Positives<br>
+FN = False Negatives<br>
+</div>
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+data = {
+    "Study_Hours": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "Pass":        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+}
+
+df = pd.DataFrame(data)
+
+print("Dataset:")
+print(df)
+
+X = df[["Study_Hours"]]
+y = df["Pass"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+plt.scatter(X, y, color='blue', label='Actual Data')
+
+x_values = np.linspace(1, 10, 100).reshape(-1, 1)
+y_values = model.predict(x_values)
+
+plt.plot(x_values, y_values, color='red', label='Logistic Regression Line')
+plt.xlabel("Study Hours")
+plt.ylabel("Pass (1) / Fail (0)")
+plt.title("Logistic Regression - Predictive Analysis")
+plt.legend()
+plt.show()
+            </pre>
+        </div>
+
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import numpy as np</b>
+→ Imports NumPy for numerical operations.
+
+<b>import pandas as pd</b>
+→ Imports Pandas for handling datasets.
+
+<b>import matplotlib.pyplot as plt</b>
+→ Imports Matplotlib for visualization.
+
+<b>from sklearn.model_selection import train_test_split</b>
+→ Used to split data into training and testing sets.
+
+<b>from sklearn.linear_model import LogisticRegression</b>
+→ Imports Logistic Regression algorithm.
+
+<b>from sklearn.metrics import accuracy_score, confusion_matrix, classification_report</b>
+→ Used to evaluate model performance.
+
+<b>data = {...}</b>
+→ Creates a dataset with study hours and pass/fail outcome.
+
+<b>df = pd.DataFrame(data)</b>
+→ Converts dictionary into DataFrame.
+
+<b>X = df[["Study_Hours"]]</b>
+→ Selects input feature.
+
+<b>y = df["Pass"]</b>
+→ Selects target variable.
+
+<b>train_test_split(...)</b>
+→ Splits dataset into training and testing data.
+
+<b>model = LogisticRegression()</b>
+→ Creates Logistic Regression model.
+
+<b>model.fit(X_train, y_train)</b>
+→ Trains the model.
+
+<b>y_pred = model.predict(X_test)</b>
+→ Predicts output for test data.
+
+<b>accuracy_score()</b>
+→ Calculates accuracy of the model.
+
+<b>confusion_matrix()</b>
+→ Displays correct and incorrect predictions.
+
+<b>classification_report()</b>
+→ Shows precision, recall, and F1-score.
+
+<b>plt.scatter()</b>
+→ Plots actual data points.
+
+<b>plt.plot()</b>
+→ Plots logistic regression line.
+
+<b>plt.show()</b>
+→ Displays the graph.
+            </pre>
+        </div>
+
+        
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+Dataset:
+   Study_Hours  Pass
+0            1     0
+1            2     0
+2            3     0
+3            4     0
+4            5     1
+5            6     1
+6            7     1
+7            8     1
+8            9     1
+9           10     1
+
+Accuracy: 1.0
+
+Confusion Matrix:
+ [[1 0]
+ [0 2]]
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00         1
+           1       1.00      1.00      1.00         2
+
+    accuracy                           1.00         3
+   macro avg       1.00      1.00      1.00         3
+weighted avg       1.00      1.00      1.00         3
+<img src="{% static 'img/exp5.png' %}"
+alt="Elbow Method" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+
+A graph showing logistic regression line and data points is generated.
+            </pre>
+        </div>
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            The Logistic Regression model successfully predicts whether a student passes or fails based on study hours.
+            The model achieves high accuracy, indicating good predictive performance.
+        </div>
+
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+<span class="output-heading">1. What is Logistic Regression?</span>
+Ans: Logistic Regression is a supervised learning algorithm used for binary classification.
+
+<span class="output-heading">2. What type of problems does Logistic Regression solve?</span>
+Ans: Binary classification problems.
+
+<span class="output-heading">3. What is the dependent variable here?</span>
+Ans: Pass (0 or 1).
+
+<span class="output-heading">4. Why do we use train-test split?</span>
+Ans: To evaluate model performance on unseen data.
+
+<span class="output-heading">5. What does accuracy represent?</span>
+Ans: The percentage of correct predictions.
+
+<span class="output-heading">6. What is a confusion matrix?</span>
+Ans: It shows correct and incorrect predictions.
+
+<span class="output-heading">7. Why is Logistic Regression not linear?</span>
+Ans: It uses a sigmoid function to map values between 0 and 1.
+
+<span class="output-heading">8. What is the sigmoid function?</span>
+Ans: A function that converts values into probabilities.
+
+<span class="output-heading">9. Is Logistic Regression used for regression?</span>
+Ans: No, it is used for classification.
+
+<span class="output-heading">10. Where is Logistic Regression used?</span>
+Ans: Medical diagnosis, spam detection, and predictive analytics.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

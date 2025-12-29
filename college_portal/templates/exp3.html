@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 3: Exploratory Factor Analysis (PCA-based)
+    </h2>
+
+    
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+
+       
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To perform Exploratory Factor Analysis using PCA to reduce
+            dimensionality and analyze factor scores for predictive modeling.
+        </div>
+
+        
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+            This experiment demonstrates Exploratory Factor Analysis using
+            Principal Component Analysis (PCA). A dataset containing academic
+            performance indicators is standardized and transformed into
+            lower-dimensional factor space. The scree plot is used to determine
+            the number of factors. The extracted factor scores are further used
+            for prediction using Logistic Regression.
+        </div>
+
+        
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+data = pd.DataFrame({
+    'Study_Hours': [2,4,6,8,10,3,5,7,9,1],
+    'Attendance': [60,65,70,80,90,62,68,75,85,55],
+    'Assignments': [50,55,65,75,85,52,60,70,80,45],
+    'Internal_Marks': [40,45,55,65,75,42,50,60,70,35],
+    'Final_Result': [0,0,1,1,1,0,1,1,1,0]
+})
+
+X = data.drop(columns=['Final_Result'])
+y = data['Final_Result']
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+pca = PCA()
+X_pca = pca.fit_transform(X_scaled)
+
+plt.plot(np.cumsum(pca.explained_variance_ratio_), marker='o')
+plt.xlabel("Number of Factors")
+plt.ylabel("Cumulative Explained Variance")
+plt.title("Scree Plot (PCA-based EFA)")
+plt.savefig("static/imag/exp3.png", dpi=300, bbox_inches='tight')
+plt.close()
+
+pca = PCA(n_components=2)
+factor_scores = pca.fit_transform(X_scaled)
+
+factor_df = pd.DataFrame(
+    factor_scores,
+    columns=['Factor1', 'Factor2']
+)
+
+print("Factor Scores:\n", factor_df)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    factor_df, y, test_size=0.3, random_state=42
+)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+print("Prediction Accuracy:", accuracy_score(y_test, y_pred))
+            </pre>
+        </div>
+
+        
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import pandas as pd</b>
+Imports Pandas library for data handling and creating DataFrames.
+
+<b>import numpy as np</b>
+Imports NumPy for numerical operations and array handling.
+
+<b>import matplotlib.pyplot as plt</b>
+Imports Matplotlib for plotting graphs (Scree Plot).
+
+<b>from sklearn.decomposition import PCA</b>
+Imports PCA class to perform Principal Component Analysis (used for EFA).
+
+<b>from sklearn.preprocessing import StandardScaler</b>
+Imports StandardScaler to standardize the data before applying PCA.
+
+<b>from sklearn.model_selection import train_test_split</b>
+Imports function to split data into training and testing sets.
+
+<b>from sklearn.linear_model import LogisticRegression</b>
+Imports Logistic Regression model for binary classification.
+
+<b>from sklearn.metrics import accuracy_score</b>
+Imports function to calculate prediction accuracy.
+
+<b>data = pd.DataFrame({</b>
+Creates a Pandas DataFrame named data.
+
+<b>'Study_Hours': [2,4,6,8,10,3,5,7,9,1],</b>
+Represents number of hours studied by students.
+
+<b>'Attendance': [60,65,70,80,90,62,68,75,85,55],</b>
+Represents student attendance percentage.
+
+<b>'Assignments': [50,55,65,75,85,52,60,70,80,45],</b>
+Represents assignment marks.
+
+<b>'Internal_Marks': [40,45,55,65,75,42,50,60,70,35],</b>
+Represents internal exam marks.
+
+<b>'Final_Result': [0,0,1,1,1,0,1,1,1,0]
+})</b>
+Represents final result (0 = Fail, 1 = Pass).
+
+<b>X = data.drop(columns=['Final_Result'])</b>
+Separates independent variables (features).
+
+<b>y = data['Final_Result']</b>
+Stores dependent variable (target).
+
+<b>scaler = StandardScaler()</b>
+Creates a StandardScaler object.
+
+<b>X_scaled = scaler.fit_transform(X)</b>
+Standardizes features to mean 0 and variance 1.
+
+<b>pca = PCA()</b>
+Initializes PCA without fixing number of components.
+
+<b>X_pca = pca.fit_transform(X_scaled)</b>
+Applies PCA to scaled data.
+
+<b>plt.plot(np.cumsum(pca.explained_variance_ratio_), marker='o')</b>
+Plots cumulative explained variance of PCA components.
+
+<b>plt.xlabel("Number of Factors")</b>
+Labels X-axis.
+
+<b>plt.ylabel("Cumulative Explained Variance")</b>
+Labels Y-axis.
+
+<b>plt.title("Scree Plot (PCA-based EFA)")</b>
+Gives title to the plot.
+
+<b>plt.show()</b>
+Displays the Scree Plot.
+
+<b>pca = PCA(n_components=2)</b>
+Selects 2 principal components (factors).
+
+<b>factor_scores = pca.fit_transform(X_scaled)</b>
+Transforms data into factor scores.
+
+<b>factor_df = pd.DataFrame(</b>
+Creates a new DataFrame.
+
+<b>factor_scores,
+columns=['Factor1', 'Factor2']
+)</b>
+Stores factor scores as Factor1 and Factor2.
+
+<b>print("Factor Scores:\n", factor_df)</b>
+Prints factor scores.
+
+<b>X_train, X_test, y_train, y_test = train_test_split(</b>
+Splits data into training and testing sets.
+
+
+<b>factor_df, y, test_size=0.3, random_state=42
+)</b>
+30% data for testing, 70% for training.
+
+<b>model = LogisticRegression()</b>
+Creates Logistic Regression model.
+
+<b>model.fit(X_train, y_train)</b>
+Trains the model using training data.
+
+<b>y_pred = model.predict(X_test)</b>
+Predicts output for test data.
+
+<b>print("\nPrediction Accuracy:", accuracy_score(y_test, y_pred))</b>
+Calculates and prints model accuracy.
+
+<b>print("\nConclusion:")</b>
+Prints conclusion heading.
+
+<b>print("Dimensionality reduction performed using PCA-based EFA.")</b>
+States PCA was used for EFA.
+
+<b>print("Extracted factors successfully used for prediction.")</b>
+Confirms factors helped in prediction.
+            </pre>
+        </div>
+
+        
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+
+            <span class="output-heading">Scree Plot:</span><br><br>
+            <img src="{% static 'img/exp3.png' %}"
+                 alt="Scree Plot"
+                 style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+
+            <br><br>
+            <pre>
+<span class="output-heading">Factor Scores:</span>
+     Factor1   Factor2
+0 -2.186167 -0.139628
+1 -1.216935  0.026768
+2  0.141787  0.187980
+3  1.732544  0.023786
+4  3.323301 -0.140409
+5 -1.763703 -0.023371
+6 -0.514370  0.074834
+7  0.937166  0.105883
+8  2.527923 -0.058312
+9 -2.981546 -0.057531
+
+Prediction Accuracy: 0.6666666666666666
+            </pre>
+        </div>
+
+        
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            PCA-based Exploratory Factor Analysis was successfully performed.
+            Extracted factors were effectively used for prediction.
+        </div>
+
+        
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+<span class="output-heading">1. What is Exploratory Factor Analysis (EFA)?</span>
+
+Ans:EFA is a technique used to identify underlying factors that explain relationships among multiple variables.
+
+<span class="output-heading">2. Why is PCA used in this EFA experiment?</span>
+
+Ans:PCA is used to reduce dimensionality by converting correlated variables into uncorrelated components while preserving maximum variance.
+
+<span class="output-heading">3. Why is data scaling required before PCA?</span>
+
+Ans:Scaling ensures all variables contribute equally since PCA is sensitive to differences in scale.
+
+<span class="output-heading">4. What does the Scree Plot show?</span>
+
+Ans:It shows cumulative explained variance to help decide the number of factors to retain.
+
+<span class="output-heading">5. What are factor scores?</span>
+
+Ans:Factor scores are new values representing observations in the reduced factor space.
+
+<span class="output-heading">6. Why were two factors selected?</span>
+
+Ans:Two factors retain most of the variance while reducing model complexity.
+
+<span class="output-heading">7. What is the target variable in this experiment?</span>
+
+Ans:Final_Result, which is a binary outcome (pass/fail).
+
+<span class="output-heading">8. Why is Logistic Regression used after EFA?</span>
+
+Ans:Because the target variable is binary and factor scores are suitable predictors.
+
+<span class="output-heading">9. What is dimensionality reduction?</span>
+
+Ans:It is the process of reducing the number of variables while preserving important information.
+
+<span class="output-heading">10. What is the main conclusion of this experiment?</span>
+
+Ans:PCA-based EFA effectively reduced dimensions and improved prediction using Logistic Regression.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

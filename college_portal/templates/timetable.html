@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 style="background:#5a0ad2;color:goldenrod;text-align:center">:: CSE-DS TIME TABLE ::</h2><br><br>
+<table border="1" cellpadding="10" cellspacing="0" 
+       style="border-collapse:collapse; width:100%; text-align:center; font-weight:bold;">
+
+
+    <tr>
+        <th style="background:#ffffff; color:#000;">Day \ Hour</th>
+        <th style="background:#2c4156; color:#fff;">9:00 - 10:00</th>
+        <th style="background:#2c4156; color:#fff;">10:00 - 11:00</th>
+        <th style="background:#2c4156; color:#fff;">11:00 - 12:00</th>
+        <th style="background:#2c4156; color:#fff;">12:00 - 1:00</th>
+        <th style="background:#2c4156; color:#fff;">1:00 - 2:00</th>
+        <th style="background:#2c4156; color:#fff;">2:00 - 3:00</th>
+        <th style="background:#2c4156; color:#fff;">3:00 - 4:00</th>
+    </tr>
+
+    <tr>
+        <td style="background:#ffccd5; color:green;">Mon</td>
+        <td style="background:#d9d9d9;">PA<br>(KDRR)</td>
+        <td style="background:#d9d9d9;">AWPS<br>(KSD)</td>
+        <td style="background:#d9d9d9;">NLP<br>(VBK)</td>
+        <td style="font-size:26px; background:#ffffff;">L</td>
+        <td style="background:#d9d9d9;">DL<br>(BKOT)</td>
+        <td style="background:#d9d9d9;">CdC<br>(MHB)</td>
+        <td style="background:#d9d9d9;">TPW-IPR<br>(VBK)</td>
+    </tr>
+
+    <tr>
+        <td style="background:#ffccd5; color:green;">Tue</td>
+        <td style="background:#d9d9d9;">NLP<br>(VBK)</td>
+        <td style="background:#d9d9d9;">DL<br>(BKOT)</td>
+        <td style="background:#d9d9d9;">CdC<br>(MHB)</td>
+        <td style="font-size:26px; background:#ffffff;">U</td>
+        <td style="background:#d9d9d9;">PA<br>(KDRR)</td>
+        <td style="background:#d9d9d9;">DV<br>(BRAJ)</td>
+        <td style="background:#d9d9d9;">TPW-IPR<br>(VBK)</td>
+    </tr>
+
+    <tr>
+        <td style="background:#ffccd5; color:green;">Wed</td>
+        <td style="background:#d9d9d9;">DV<br>(BRAJ)</td>
+        <td style="background:#d9d9d9;">PA<br>(KDRR)</td>
+        <td style="background:#d9d9d9;">CdC<br>(MHB)</td>
+        <td style="font-size:26px; background:#ffffff;">N</td>
+        <td style="background:#d9d9d9;">NLP<br>(VBK)</td>
+        <td style="background:#d9d9d9;">DL<br>(BKOT)</td>
+        <td style="background:#d9d9d9;">TS<br>(MHB)</td>
+    </tr>
+    <tr>
+        <td style="background:#ffccd5; color:green;">Thu</td>
+        <td colspan="3" style="background:yellow; color:blue;">
+            PA LAB<br>(KDRR)
+        </td>
+        <td style="font-size:26px; background:#ffffff;">C</td>
+        <td style="background:#d9d9d9;">DL<br>(BKOT)</td>
+        <td style="background:#d9d9d9;">DV<br>(BRAJ)</td>
+        <td style="background:#d9d9d9;">NLP<br>(VBK)</td>
+    </tr>
+
+    <tr>
+        <td style="background:#ffccd5; color:green;">Fri</td>
+        <td colspan="3" style="background:yellow; color:blue;">
+            NLPDV LAB<br>(VBK, BRAJ)
+        </td>
+        <td style="font-size:26px; background:#ffffff;">H</td>
+        <td style="background:#d9d9d9;">PA<br>(KDRR)</td>
+        <td style="background:#d9d9d9;">CdC<br>(MHB)</td>
+        <td style="background:#d9d9d9;">TS<br>(MHB)</td>
+    </tr>
+
+    <tr>
+        <td style="background:#ffccd5; color:green;">Sat</td>
+        <td style="background:#d9d9d9;">AWPS<br>(KSD)</td>
+        <td style="background:#d9d9d9;">AWPS<br>(KSD)</td>
+        <td style="background:#d9d9d9;">DV<br>(BRAJ)</td>
+        <td style="font-size:22px; background:#ffffff;">BREAK</td>
+        <td colspan="3" style="background:yellow; color:blue;">
+            SOFT SKILLS LAB<br>(MFA, KNAR)
+        </td>
+    </tr>
+
+</table>
+
+{% endblock %}

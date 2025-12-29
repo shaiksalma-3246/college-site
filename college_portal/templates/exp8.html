@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 8: Conjoint Analysis using Linear Regression
+    </h2>
+
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+
+        <!-- AIM -->
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To perform Conjoint Analysis using Linear Regression in order to calculate
+            part-worth utilities and attribute importance for different product features
+            based on customer ratings.
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+            Conjoint Analysis is a statistical technique used to understand how different
+            product attributes influence user preference or ratings.
+            <br><br>
+            In this experiment:
+            <ul>
+                <li>A mobile phone dataset is created with attributes: Price, Battery, Camera</li>
+                <li>Customer ratings are used as the dependent variable</li>
+                <li>Categorical variables are converted using One-Hot Encoding</li>
+                <li>Linear Regression is used to calculate part-worth utilities and attribute importance</li>
+            </ul>
+
+            <strong>Formulas Used:</strong><br><br>
+
+            <b>1. Linear Regression Equation</b><br>
+            Y = β₀ + β₁X₁ + β₂X₂ + ... + βₙXₙ
+            <br><br>
+
+            <b>2. Attribute Importance Formula</b><br>
+            Importance = ( |βᵢ| / Σ|β| ) × 100
+        </div>
+
+        <!-- CODE -->
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+data = {
+    "Price": [10000, 10000, 15000, 15000, 20000, 20000],
+    "Battery": ["Low", "High", "Low", "High", "Low", "High"],
+    "Camera": ["12MP", "12MP", "48MP", "48MP", "64MP", "64MP"],
+    "Rating": [3, 5, 4, 6, 5, 7]
+}
+
+df = pd.DataFrame(data)
+print("Dataset:")
+print(df)
+
+df_encoded = pd.get_dummies(df, columns=["Battery", "Camera"], drop_first=True)
+
+X = df_encoded.drop("Rating", axis=1)
+y = df_encoded["Rating"]
+
+model = LinearRegression()
+model.fit(X, y)
+
+utilities = pd.DataFrame({
+    "Attribute": X.columns,
+    "Utility": model.coef_
+})
+
+print("\nPart-Worth Utilities:")
+print(utilities)
+
+importance = abs(model.coef_) / np.sum(abs(model.coef_)) * 100
+
+importance_df = pd.DataFrame({
+    "Attribute": X.columns,
+    "Importance (%)": importance
+})
+
+print("\nAttribute Importance:")
+print(importance_df)
+            </pre>
+        </div>
+
+        <!-- EXPLANATION (UNCHANGED) -->
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+import pandas as pd
+→ Used for data handling.
+
+import numpy as np
+→ Used for numerical calculations.
+
+from sklearn.linear_model import LinearRegression
+→ Used to build the regression model.
+
+data = {...}
+→ Creates a dataset representing different mobile phone configurations and their ratings.
+
+pd.get_dummies()
+→ Converts categorical variables into numerical values.
+
+drop_first=True
+→ Avoids multicollinearity.
+
+model.fit(X, y)
+→ Trains the linear regression model.
+
+model.coef_
+→ Represents part-worth utilities.
+
+Importance calculation
+→ Determines relative importance of attributes.
+            </pre>
+        </div>
+
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+<span class="output-heading">Dataset:</span>
+   Price Battery Camera  Rating
+0  10000     Low   12MP       3
+1  10000    High   12MP       5
+2  15000     Low   48MP       4
+3  15000    High   48MP       6
+4  20000     Low   64MP       5
+5  20000    High   64MP       7
+
+<span class="output-heading">Part-Worth Utilities:</span>
+     Attribute       Utility
+0        Price  2.000000e-04
+1  Battery_Low -2.000000e+00
+2  Camera_48MP  8.000000e-09
+3  Camera_64MP  1.600000e-08
+
+<span class="output-heading">Attribute Importance:</span>
+     Attribute  Importance (%)
+0        Price    9.999000e-03
+1  Battery_Low    9.999000e+01
+2  Camera_48MP    3.999600e-07
+3  Camera_64MP    7.999200e-07
+            </pre>
+        </div>
+
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            The conjoint analysis was successfully performed using linear regression on the given mobile phone dataset.
+            After applying one-hot encoding and training the regression model, the part-worth utilities for each attribute
+            level were obtained from the regression coefficients. These utilities indicate how much each product attribute
+            contributes to the customer rating.
+            <br><br>
+            The attribute importance values were calculated using the absolute values of the regression coefficients.
+            The results show that:
+            <ul>
+                <li>Price has a significant impact on the customer rating.</li>
+                <li>Battery (High) contributes positively compared to Battery (Low).</li>
+                <li>Higher Camera resolution increases customer preference.</li>
+            </ul>
+            Thus, the experiment demonstrates that Conjoint Analysis using Linear Regression is an effective method
+            to evaluate customer preferences and attribute importance.
+        </div>
+
+      
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+<b>1. What is Conjoint Analysis?</b>
+Conjoint Analysis is a statistical technique used to understand how different product attributes influence customer preference or rating.
+
+<b>2. What is the aim of this experiment?</b>
+The aim is to calculate part-worth utilities and attribute importance of product features using Linear Regression.
+
+<b>3. Why is Linear Regression used in Conjoint Analysis?</b>
+Linear Regression is used to estimate the contribution of each attribute to the overall customer rating.
+
+<b>4. What are part-worth utilities?</b>
+Part-worth utilities are regression coefficients that show how much each attribute level contributes to the rating.
+
+<b>5. Which variable is considered as the dependent variable in this experiment?</b>
+The Rating is the dependent variable.
+
+<b>6. Why is one-hot encoding used in this experiment?</b>
+One-hot encoding is used to convert categorical attributes like Battery and Camera into numerical values.
+
+<b>7. What is the purpose of drop_first=True in get_dummies()?</b>
+It avoids multicollinearity by removing one reference category.
+
+<b>8. How is attribute importance calculated?</b>
+Attribute importance is calculated using the absolute value of coefficients divided by the sum of all coefficients and multiplied by 100.
+
+<b>9. Which Python libraries are used in this experiment?</b>
+Pandas
+NumPy
+Scikit-learn
+
+<b>10. What is the outcome of this experiment?</b>
+The experiment identifies which product attributes most influence customer ratings and their relative importance.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

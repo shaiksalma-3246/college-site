@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<nav class="top-menu">
+    <a href="{%url 'timetable' %}">Timetable</a>
+    <a href="{% url 'syllabus' %}">Syllabus</a>
+    <a href="{% url 'lecturer_login' %}">Lecturer Login</a>
+
+    <a href="#">Assignments</a>
+    
+</nav>
+
+<div class="after-login-image">
+    <img src="{% static 'img/group.jpg' %}">
+</div>
+
+{% endblock %}

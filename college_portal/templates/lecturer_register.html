@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Lecturer Account</title>
+    <style>
+        body{
+            margin:0;
+            height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background: linear-gradient(120deg,#6a11cb,#2575fc);
+            font-family: Arial;
+        }
+        .box{
+            background:white;
+            padding:30px;
+            width:360px;
+            border-radius:12px;
+            box-shadow:0 20px 40px rgba(0,0,0,.3);
+        }
+        h2{text-align:center;}
+        input{
+            width:100%;
+            padding:10px;
+            margin:10px 0;
+            border:1px solid #ccc;
+            border-radius:6px;
+        }
+        button{
+            width:100%;
+            padding:10px;
+            background:#22c55e;
+            border:none;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+        }
+        .error{color:red;text-align:center;}
+        .success{color:green;text-align:center;}
+        .link{text-align:center;margin-top:10px;}
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Create Lecturer Account</h2>
+
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    {% if success %}<p class="success">{{ success }}</p>{% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <input name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button>Create Account</button>
+    </form>
+
+    <div class="link">
+        <a href="{% url 'lecturer_login' %}">Back to Login</a>
+    </div>
+</div>
+
+</body>
+</html>
