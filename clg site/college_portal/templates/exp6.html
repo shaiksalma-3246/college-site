@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 6: Linear Discriminant Analysis (LDA)
+    </h2>
+
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+
+       
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To implement Linear Discriminant Analysis (LDA) for classifying students as pass or fail based on their Maths and Science scores and to evaluate the classification performance.
+        </div>
+
+      
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+            Linear Discriminant Analysis (LDA) is a supervised machine learning technique used for classification and dimensionality reduction.
+            It works by finding a linear combination of features that best separates two or more classes.
+            <br><br>
+            LDA maximizes the distance between class means while minimizing the variance within each class.
+            In this experiment, LDA is applied to classify students into Pass and Fail categories based on their Maths and Science marks.
+            <br><br>
+            <strong>LDA Objective Function:</strong><br>
+            LDA maximizes the ratio:
+            <br><br>
+            <b>J(w) = (wᵀ S<sub>B</sub> w) / (wᵀ S<sub>W</sub> w)</b>
+            <br><br>
+            where:<br>
+            S<sub>B</sub> = Between-class scatter matrix<br>
+            S<sub>W</sub> = Within-class scatter matrix<br>
+            w = projection vector
+        </div>
+
+       
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+data = {
+    "Maths":    [35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
+    "Science":  [30, 35, 40, 45, 50, 55, 60, 65, 70, 75],
+    "Result":   [0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+}
+
+df = pd.DataFrame(data)
+
+print("Dataset:")
+print(df)
+
+X = df[["Maths", "Science"]]
+y = df["Result"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+lda = LinearDiscriminantAnalysis()
+lda.fit(X_train, y_train)
+
+y_pred = lda.predict(X_test)
+
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+X_lda = lda.transform(X)
+
+plt.scatter(X_lda, y, c=y, cmap='coolwarm')
+plt.xlabel("LDA Component 1")
+plt.ylabel(" ")
+plt.title("Linear Discriminant Analysis")
+plt.show()
+            </pre>
+        </div>
+
+        
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import numpy as np</b>
+→ Imports NumPy for numerical computations.
+
+<b>import pandas as pd</b>
+→ Imports Pandas for dataset handling.
+
+<b>import matplotlib.pyplot as plt</b>
+→ Imports Matplotlib for visualization.
+
+<b>LinearDiscriminantAnalysis</b>
+→ Imports LDA algorithm for classification.
+
+<b>data = {...}</b>
+→ Creates dataset with Maths, Science marks and Result.
+
+<b>df = pd.DataFrame(data)</b>
+→ Converts data into DataFrame.
+
+<b>X = df[["Maths", "Science"]]</b>
+→ Selects independent variables.
+
+<b>y = df["Result"]</b>
+→ Selects dependent variable.
+
+<b>train_test_split()</b>
+→ Splits data into training and testing sets.
+
+<b>lda = LinearDiscriminantAnalysis()</b>
+→ Creates LDA model.
+
+<b>lda.fit(X_train, y_train)</b>
+→ Trains the model.
+
+<b>y_pred = lda.predict(X_test)</b>
+→ Predicts test data results.
+
+<b>accuracy_score()</b>
+→ Measures prediction accuracy.
+
+<b>confusion_matrix()</b>
+→ Displays correct and incorrect predictions.
+
+<b>classification_report()</b>
+→ Shows precision, recall, and F1-score.
+
+<b>lda.transform(X)</b>
+→ Projects data into LDA space.
+
+<b>plt.scatter()</b>
+→ Visualizes LDA projection.
+            </pre>
+        </div>
+
+        
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+<span class="output-heading">Dataset:</span>
+   Maths  Science  Result
+0     35       30       0
+1     40       35       0
+2     45       40       0
+3     50       45       0
+4     55       50       1
+5     60       55       1
+6     65       60       1
+7     70       65       1
+8     75       70       1
+9     80       75       1
+
+Accuracy: 1.0
+
+<span class="output-heading">Confusion Matrix:</span>
+[[1 0]
+ [0 2]]
+
+<span class="output-heading">Classification Report:</span>
+               precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00         1
+           1       1.00      1.00      1.00         2
+
+    accuracy                           1.00         3
+   macro avg       1.00      1.00      1.00         3
+weighted avg       1.00      1.00      1.00         3
+
+<img src="{% static 'img/exp6.png' %}"
+alt="Elbow Method" style="width:100%; max-width:600px; display:block; margin:auto; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+
+            </pre>
+        </div>
+
+      
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            The Linear Discriminant Analysis model successfully classified students into pass and fail categories based on Maths and Science marks.
+            The model achieved 100% accuracy, indicating excellent classification performance.
+        </div>
+
+       
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+1. What is Linear Discriminant Analysis?
+Ans: LDA is a supervised learning algorithm used for classification and dimensionality reduction.
+
+2. Is LDA supervised or unsupervised?
+Ans: LDA is a supervised learning technique.
+
+3. What does LDA try to maximize?
+Ans: It maximizes class separability.
+
+4. What are independent variables here?
+Ans: Maths and Science marks.
+
+5. What is the dependent variable?
+Ans: Result (Pass/Fail).
+
+6. What is the use of scatter matrices in LDA?
+Ans: To measure within-class and between-class variance.
+
+7. Can LDA be used for dimensionality reduction?
+Ans: Yes.
+
+8. What is confusion matrix?
+Ans: It shows correct and incorrect classifications.
+
+9. What does 100% accuracy mean?
+Ans: All predictions are correct.
+
+10. Where is LDA used in real life?
+Ans: Face recognition, medical diagnosis, and pattern recognition.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

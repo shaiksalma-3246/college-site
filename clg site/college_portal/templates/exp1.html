@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 1: Introduction to SPSS
+    </h2>
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+    <div class="exp-content">
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To understand basic SPSS operations such as sorting data, splitting files,
+            computing new variables, recoding values, and selecting cases.
+        </div>
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+In this experiment, fundamental data handling operations commonly used in SPSS are implemented using Python in Google Colab with the help of the pandas library. A sample dataset containing student information such as ID, age, gender, and score is created and analyzed. The dataset is first organized using the Sort File operation to arrange records based on scores. The Split File operation is applied to separate the data according to gender for independent analysis. A new variable is generated using the Compute operation by modifying existing score values. The Recode operation is used to convert numerical scores into categorical outcomes such as Pass or Fail. Finally, the Select Cases operation is performed to filter records that satisfy a given condition. These operations are essential for data preparation and analysis in predictive analytics.
+        </div>
+        <div id="code" class="exp-section">
+            <strong>Code :</strong><br><br>
+            <pre>
+import pandas as pd
+data = {
+    "ID": [1, 2, 3, 4, 5, 6],
+    "Age": [18, 20, 19, 21, 22, 20],
+    "Gender": ["Male", "Female", "Male", "Female", "Male", "Female"],
+    "Score": [45, 78, 60, 90, 35, 55]
+}
+
+df = pd.DataFrame(data)
+print("Original Data:")
+print(df)
+sorted_df = df.sort_values(by="Score")
+print("\nSorted Data by Score:")
+print(sorted_df)
+print("\nSplit Data by Gender:")
+male_df = df[df["Gender"] == "Male"]
+female_df = df[df["Gender"] == "Female"]
+print("\nMale Students:")
+print(male_df)
+print("\nFemale Students:")
+print(female_df)
+df["Final_Score"] = df["Score"] + 5
+print("\nAfter Computing Final_Score:")
+print(df)
+df["Result"] = df["Score"].apply(lambda x: "Pass" if x >= 50 else "Fail")
+print("\nAfter Recoding Pass/Fail:")
+print(df)
+selected_df = df[df["Score"] >= 60]
+print("\nSelected Cases (Score >= 60):")
+print(selected_df)
+            </pre>
+        </div>
+
+        
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import pandas as pd</b>
+→ Imports the pandas library for data analysis.
+
+<b>data = {</b>
+→ Creates a dictionary to store the dataset.
+
+<b>"ID": [1, 2, 3, 4, 5, 6],</b>
+→ Stores student ID values.
+
+<b>"Age": [18, 20, 19, 21, 22, 20],</b>
+→ Stores the age of students.
+
+<b>"Gender": ["Male", "Female", "Male", "Female", "Male", "Female"],</b>
+→ Stores gender information.
+
+<b>"Score": [45, 78, 60, 90, 35, 55]</b>
+→ Stores marks obtained.
+}
+
+<b>df = pd.DataFrame(data)</b>
+→ Converts dictionary into DataFrame.
+
+<b>sorted_df = df.sort_values(by="Score")</b>
+→ Sorts data by score.
+
+<b>df["Final_Score"] = df["Score"] + 5</b>
+→ Computes new variable.
+
+<b>df["Result"] = df["Score"].apply(lambda x: "Pass" if x >= 50 else "Fail")</b>
+→ Recodes Pass/Fail.
+
+<b>selected_df = df[df["Score"] >= 60]</b>
+→ Selects students scoring 60 or above.
+            </pre>
+        </div>
+
+        
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+<span class="output-heading">Original Data:</span>
+   ID  Age  Gender  Score
+0   1   18    Male     45
+1   2   20  Female     78
+2   3   19    Male     60
+3   4   21  Female     90
+4   5   22    Male     35
+5   6   20  Female     55
+
+<span class="output-heading">Sorted Data by Score:</span>
+   ID  Age  Gender  Score
+4   5   22    Male     35
+0   1   18    Male     45
+5   6   20  Female     55
+2   3   19    Male     60
+1   2   20  Female     78
+3   4   21  Female     90
+
+<span class="output-heading">Split Data by Gender:</span>
+
+<span class="output-heading">Male Students:</span>
+   ID  Age Gender  Score
+0   1   18   Male     45
+2   3   19   Male     60
+4   5   22   Male     35
+
+<span class="output-heading">Female Students:</span>
+   ID  Age  Gender  Score
+1   2   20  Female     78
+3   4   21  Female     90
+5   6   20  Female     55
+
+<span class="output-heading">After Computing Final_Score:</span>
+   ID  Age  Gender  Score  Final_Score
+0   1   18    Male     45           50
+1   2   20  Female     78           83
+2   3   19    Male     60           65
+3   4   21  Female     90           95
+4   5   22    Male     35           40
+5   6   20  Female     55           60
+
+<span class="output-heading">After Recoding Pass/Fail:</span>
+   ID  Age  Gender  Score  Final_Score Result
+0   1   18    Male     45           50   Fail
+1   2   20  Female     78           83   Pass
+2   3   19    Male     60           65   Pass
+3   4   21  Female     90           95   Pass
+4   5   22    Male     35           40   Fail
+5   6   20  Female     55           60   Pass
+
+<span class="output-heading">Selected Cases (Score >= 60):</span>
+   ID  Age  Gender  Score  Final_Score Result
+1   2   20  Female     78           83   Pass
+2   3   19    Male     60           65   Pass
+3   4   21  Female     90           95   Pass
+            </pre>
+        </div>
+
+       
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            Successfully learned sorting, splitting, computing, recoding,
+            and selecting cases.
+        </div>
+
+    
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br><pre>
+<b>1. What is Predictive Analytics?</b>
+Answer:Predictive analytics is the process of analyzing data to predict future outcomes using statistical and machine learning techniques.<br><br>
+<b>2. What is SPSS?</b>
+Answer:SPSS stands for Statistical Package for the Social Sciences and is used for data analysis and statistical operations.<br><br>
+<b>3. Why do we use pandas in Python?</b>
+Answer:Pandas is used for data manipulation and analysis, similar to SPSS operations.<br><br>
+<b>4. What is a DataFrame?</b>
+Answer:A DataFrame is a two-dimensional table with rows and columns used to store data in pandas.<br><br>
+<b>5. What is Sort File operation?</b>
+Answer:Sort File arranges data in ascending or descending order based on a variable.<br><br>
+<b>6. Which function is used to sort data in Python?</b>
+Answer:sort_values() function is used to sort data in Python.<br><br>
+<b>7. What is Split File operation?</b>
+Answer:Split File divides the dataset into groups based on a categorical variable.<br><br>
+<b>8. How is Split File implemented in Python?</b>
+Answer:It is implemented using conditional filtering on columns.<br><br>
+<b>9. What is Compute Variable?</b>
+Answer:Compute Variable is used to create a new variable using existing variables.<br><br>
+<b>10. Give an example of Compute operation.</b>
+Answer:Adding bonus marks to the score to create a final score.<br><br>
+            </pre>
+            
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

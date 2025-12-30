@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="syllabus-wrapper experiment-page">
+    <h2 class="syllabus-heading">
+        Experiment 10: Multivariate Analysis of Variance (MANOVA)
+    </h2>
+
+    <div class="exp-tabs">
+        <button class="exp-tab active" onclick="showSection('aim', this)">Aim</button>
+        <button class="exp-tab" onclick="showSection('procedure', this)">Description</button>
+        <button class="exp-tab" onclick="showSection('code', this)">Code</button>
+        <button class="exp-tab" onclick="showSection('explanation', this)">Explanation</button>
+        <button class="exp-tab" onclick="showSection('output', this)">Output</button>
+        <button class="exp-tab" onclick="showSection('result', this)">Result</button>
+        <button class="exp-tab" onclick="showSection('viva', this)">Viva</button>
+    </div>
+
+    <div class="exp-content">
+        <div id="aim" class="exp-section active">
+            <strong>Aim:</strong><br><br>
+            To apply Multivariate Analysis of Variance (MANOVA) to examine the effect of different teaching methods
+            on multiple dependent variables such as Mathematics and Science scores.
+        </div>
+        <div id="procedure" class="exp-section">
+            <strong>Description:</strong><br><br>
+            Multivariate Analysis of Variance (MANOVA) is a statistical technique used to test whether
+            the mean vectors of two or more dependent variables differ across groups defined by an
+            independent categorical variable. It is an extension of ANOVA that considers correlations
+            among dependent variables.
+            <br><br>
+            In MANOVA, the null hypothesis assumes that the population mean vectors of all groups are equal.
+            If the null hypothesis is rejected, it indicates that at least one group differs significantly
+            in terms of the combined dependent variables.
+            <br><br>
+
+            <strong>Hypotheses:</strong><br><br>
+            H<sub>0</sub>: μ<sub>1</sub> = μ<sub>2</sub> = μ<sub>3</sub> = … (All group mean vectors are equal)<br>
+            H<sub>1</sub>: At least one group mean vector is different
+            <br><br>
+
+            <strong>MANOVA Test Statistics:</strong><br><br>
+
+            <b>1. Wilks’ Lambda (Λ)</b><br>
+            Λ = |E| / |E + H|
+            <br><br>
+            where:<br>
+            E = Error (within-group) sum of squares and cross-products matrix<br>
+            H = Hypothesis (between-group) sum of squares and cross-products matrix
+            <br><br>
+
+            <b>2. Pillai’s Trace (V)</b><br>
+            V = trace[ H(H + E)<sup>-1</sup> ]
+            <br><br>
+
+            <b>3. Hotelling–Lawley Trace (T)</b><br>
+            T = trace( E<sup>-1</sup>H )
+            <br><br>
+
+            <b>4. Roy’s Greatest Root (Θ)</b><br>
+            Θ = max(λ<sub>i</sub>)
+            <br><br>
+
+            These statistics are used to determine whether teaching methods
+            (Online, Offline, Hybrid) have a statistically significant effect on
+            students’ Mathematics and Science performance.
+        </div>
+        <div id="code" class="exp-section">
+            <strong>Code:</strong><br><br>
+            <pre>
+import pandas as pd
+from statsmodels.multivariate.manova import MANOVA
+
+data = {
+    "Teaching_Method": ["Online", "Online", "Online",
+                        "Offline", "Offline", "Offline",
+                        "Hybrid", "Hybrid", "Hybrid"],
+    "Math_Score": [70, 72, 68, 80, 82, 78, 75, 77, 74],
+    "Science_Score": [65, 67, 64, 85, 88, 83, 78, 80, 76]
+}
+
+df = pd.DataFrame(data)
+
+print("Dataset:")
+print(df)
+
+manova = MANOVA.from_formula(
+    'Math_Score + Science_Score ~ Teaching_Method',
+    data=df
+)
+
+print("\nMANOVA Results:")
+print(manova.mv_test())
+            </pre>
+        </div>
+        <div id="explanation" class="exp-section">
+            <strong>Explanation:</strong><br><br>
+            <pre>
+<b>import pandas as pd</b>
+→ Imports Pandas for data handling.
+
+<b>MANOVA.from_formula()</b>
+→ Defines the MANOVA model using formula syntax.
+
+<b>Math_Score + Science_Score</b>
+→ Multiple dependent variables.
+
+<b>Teaching_Method</b>
+→ Independent categorical variable.
+
+<b>manova.mv_test()</b>
+→ Performs multivariate hypothesis testing and displays statistics.
+            </pre>
+        </div>
+        <div id="output" class="exp-section">
+            <strong>Output:</strong><br><br>
+            <pre>
+<span class="output-heading">Dataset:</span>
+  Teaching_Method  Math_Score  Science_Score
+0          Online          70             65
+1          Online          72             67
+2          Online          68             64
+3         Offline          80             85
+4         Offline          82             88
+5         Offline          78             83
+6          Hybrid          75             78
+7          Hybrid          77             80
+8          Hybrid          74             76
+
+<span class="output-heading">MANOVA Results:</span>
+
+                   Multivariate linear model
+===============================================================
+                                                               
+---------------------------------------------------------------
+       Intercept         Value   Num DF Den DF  F Value  Pr > F
+---------------------------------------------------------------
+          Wilks' lambda   0.0012 2.0000 5.0000 2078.3708 0.0000
+         Pillai's trace   0.9988 2.0000 5.0000 2078.3708 0.0000
+ Hotelling-Lawley trace 831.3483 2.0000 5.0000 2078.3708 0.0000
+    Roy's greatest root 831.3483 2.0000 5.0000 2078.3708 0.0000
+---------------------------------------------------------------
+                                                               
+---------------------------------------------------------------
+     Teaching_Method      Value  Num DF  Den DF F Value  Pr > F
+---------------------------------------------------------------
+           Wilks' lambda  0.0089 4.0000 10.0000  24.0489 0.0000
+          Pillai's trace  1.2601 4.0000 12.0000   5.1096 0.0123
+  Hotelling-Lawley trace 81.4382 4.0000  5.1429  99.9469 0.0000
+     Roy's greatest root 81.0640 2.0000  6.0000 243.1919 0.0000
+===============================================================
+
+            </pre>
+        </div>
+        <div id="result" class="exp-section">
+            <strong>Result:</strong><br><br>
+            The MANOVA analysis indicates that teaching method has a statistically significant
+            effect on students’ Mathematics and Science scores. Hence, different teaching
+            approaches result in different academic performance outcomes.
+        </div>
+        <div id="viva" class="exp-section">
+            <strong>Viva Questions:</strong><br><br>
+            <pre>
+<b>1. What is MANOVA?</b>
+Ans: MANOVA analyzes multiple dependent variables simultaneously.
+
+<b>2. How is MANOVA different from ANOVA?</b>
+Ans: MANOVA handles more than one dependent variable.
+
+<b>3. What are dependent variables here?</b>
+Ans: Math_Score and Science_Score.
+
+<b>4. What is Wilks’ Lambda?</b>
+Ans: A statistic measuring overall group differences.
+
+<b>5. What does Pillai’s Trace indicate?</b>
+Ans: The proportion of explained variance.
+
+<b>6. When is MANOVA preferred?</b>
+Ans: When dependent variables are correlated.
+
+<b>7. What is the null hypothesis in MANOVA?</b>
+Ans: All group mean vectors are equal.
+
+<b>8. What does p-value < 0.05 indicate?</b>
+Ans: Significant difference between groups.
+
+<b>9. What are the teaching methods analyzed?</b>
+Ans: Online, Offline, and Hybrid.
+
+<b>10. Where is MANOVA used?</b>
+Ans: Education research, psychology, and social sciences.
+            </pre>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+    document.querySelectorAll('.exp-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.exp-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="syllabus-wrapper">
+    <h2 class="syllabus-heading">Predictive Analytics Lab</h2>
+
+    <div class="syllabus-list">
+
+        <a href="{% url 'exp1' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">
+            1. Introduction to SPSS
+        </a>
+
+        <a href="{% url 'exp2' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">2. Chi-Square Test</a>
+        <a href="{% url 'exp3' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">3. Exploratory Factor Analysis</a>
+        
+        <a href="{% url 'exp4' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">4. Cluster Analysis</a>
+        <a href="{% url 'exp5' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">5. Logistic Regression</a>
+        <a href="{% url 'exp6' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">6. Discriminant Analysis</a>
+        <a href="{% url 'exp7' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">7. Confirmatory Factor Analysis</a>
+        <a href="{% url 'exp8' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">8. Conjoint Analysis</a>
+        <a href="{% url 'exp9' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">9. Time Series</a>
+        <a href="{% url 'exp10' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">10. MANOVA</a>
+        <a href="{% url 'exp11' %}" class="syllabus-card" style="text-decoration:none; color:inherit;">11. Decision Tree Analysis</a>
+
+    </div>
+</div>
+
+{% endblock %}

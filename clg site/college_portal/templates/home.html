@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div id="splash" {% if show_login %}style="display:none;"{% endif %}>
+    <img src="{% static 'img/ci.jpeg' %}" id="splash-image">
+    <div class="splash-text">Click anywhere to continue</div>
+</div>
+
+
+<div id="login-box" {% if not show_login %}style="display:none;"{% endif %}>
+    <h2>Access Your Account</h2>
+
+    {% if error %}
+    <script>alert("Invalid username or password");</script>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("splash")?.addEventListener("click", function () {
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("login-box").style.display = "block";
+});
+</script>
+
+{% endblock %}
